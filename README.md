@@ -1,183 +1,233 @@
 # 🔐 CyberCafe Pass
 
-Um gerenciador de senhas desktop desenvolvido com **Electron**, criado para organizar credenciais de forma prática, centralizada e com uma interface própria.
+> **Gerenciador de senhas local com abordagem Zero-Knowledge e visual Cozy Cyberpunk.**
 
-O projeto nasceu de uma ideia simples: senhas fazem parte da rotina de praticamente qualquer pessoa que utiliza serviços digitais, e ter uma forma organizada de armazená-las pode tornar o gerenciamento dessas credenciais muito mais simples.
+O **CyberCafe Pass** é uma aplicação desktop desenvolvida para armazenar e organizar credenciais de forma local, combinando uma interface moderna com uma arquitetura baseada em **Electron + React + TypeScript**.
 
-Além de resolver um problema prático, o CyberCafe Pass também explora o desenvolvimento de aplicações desktop utilizando tecnologias web e recursos nativos disponibilizados pelo Electron.
+O projeto nasceu de uma necessidade prática: ter um gerenciador de senhas próprio, local e sob controle do usuário, enquanto explora conceitos de desenvolvimento desktop, comunicação entre processos e segurança em aplicações Electron.
+
+A proposta visual combina uma estética **Cozy Cyberpunk**, utilizando tons escuros, tipografia monoespaçada e elementos de interface inspirados em tecnologia e ambientes digitais.
 
 ---
 
-## 🎯 Objetivo
+## 🎯 Objetivos
 
-O CyberCafe Pass tem como objetivo oferecer uma aplicação desktop dedicada ao gerenciamento de senhas e credenciais.
+O CyberCafe Pass foi criado com três objetivos principais:
 
-A proposta é reunir informações que normalmente ficam espalhadas entre anotações, arquivos ou diferentes serviços em uma interface única, permitindo consultar, organizar e administrar essas credenciais de maneira mais conveniente.
+- Criar um gerenciador de credenciais desktop próprio.
+- Explorar o desenvolvimento de aplicações desktop utilizando tecnologias web.
+- Estudar e aplicar boas práticas de arquitetura e segurança no Electron.
 
-O projeto também serve como exploração prática de conceitos importantes no desenvolvimento desktop, como:
+Além da aplicação em si, o projeto serve como um laboratório prático para conceitos como:
 
-- Comunicação entre processos.
-- Integração entre interface web e recursos nativos.
+- Arquitetura Main / Preload / Renderer.
+- Comunicação IPC.
+- Isolamento entre interface e processo principal.
+- Gerenciamento de estado.
 - Armazenamento local.
-- Gerenciamento de janelas.
-- Segurança na comunicação entre processos.
-- Organização de uma aplicação Electron.
+- Tipagem estática com TypeScript.
+- Build e distribuição de aplicações Electron.
+- Organização de projetos modernos com Vite.
 
 ---
 
-## ✨ Funcionalidades
+## ✨ Principais características
 
 ### 🔐 Gerenciamento de credenciais
 
-O aplicativo foi desenvolvido para centralizar informações de acesso em uma interface dedicada.
+A aplicação foi desenvolvida para centralizar informações de acesso em uma interface dedicada.
 
-Entre as operações disponíveis estão:
+O fluxo da aplicação contempla operações como:
 
 - Cadastro de credenciais.
-- Visualização dos registros armazenados.
-- Organização das informações de acesso.
-- Edição de registros.
+- Visualização de registros.
+- Edição de informações.
 - Exclusão de registros.
-- Consulta das credenciais diretamente pela aplicação.
+- Organização dos dados dentro da aplicação.
 
 ### 🖥️ Aplicação desktop
 
-Por utilizar Electron, o CyberCafe Pass funciona como uma aplicação desktop independente, utilizando tecnologias web para construir sua interface.
+O CyberCafe Pass utiliza Electron para transformar a aplicação web em um aplicativo desktop.
 
-A aplicação possui:
+Isso permite combinar:
 
-- Janela própria.
-- Controles personalizados de janela.
-- Inicialização através do processo principal do Electron.
-- Comunicação controlada entre a interface e o processo principal.
+- React para a interface.
+- TypeScript para tipagem e organização do código.
+- Electron para integração com recursos nativos.
+- Vite para desenvolvimento e build.
+- Electron Builder para empacotamento.
 
-### 🔒 Comunicação entre processos
+### 🎨 Cozy Cyberpunk
 
-A aplicação utiliza um processo `preload` como ponte entre a interface e os recursos disponibilizados pelo Electron.
+A interface foi pensada para fugir do visual tradicional de aplicações de gerenciamento de senhas.
 
-A configuração utiliza:
+A identidade visual combina:
 
-- `contextIsolation: true`
-- `nodeIntegration: false`
+- Tema escuro.
+- Elementos inspirados em cyberpunk.
+- Tipografia `JetBrains Mono`.
+- Tipografia `Quicksand`.
+- Ícones com Lucide React.
+- Interface construída com Tailwind CSS.
 
-Dessa forma, a interface não acessa diretamente as APIs do Node.js, mantendo as operações do processo principal separadas da camada visual.
-
----
-
-## 🛠️ Tecnologias
-
-- **Electron** — desenvolvimento da aplicação desktop.
-- **Node.js** — execução do processo principal e acesso às APIs do sistema.
-- **JavaScript** — lógica da aplicação e comunicação entre processos.
-- **HTML5** — estrutura da interface.
-- **CSS3** — estilização e identidade visual.
-- **electron-vite** — fluxo de desenvolvimento e build da aplicação.
+A ideia é criar uma aplicação que seja funcional sem abrir mão de personalidade visual.
 
 ---
 
-## 🏗️ Arquitetura da aplicação
+## 🔒 Segurança e arquitetura Electron
 
-O CyberCafe Pass utiliza a arquitetura de processos do Electron para separar a interface das operações executadas pelo processo principal.
+Como o projeto trabalha com credenciais, a segurança faz parte da arquitetura desde a camada de comunicação entre os processos.
 
-### Processo principal — `main.js`
-
-Responsável pelo gerenciamento da aplicação desktop e pelas operações que precisam de acesso às APIs do Electron/Node.js.
-
-Entre suas responsabilidades estão:
-
-- Inicializar a aplicação.
-- Criar e gerenciar a janela principal.
-- Controlar o ciclo de vida da aplicação.
-- Disponibilizar operações para a interface através do IPC.
-- Gerenciar recursos que não devem ser executados diretamente no renderer.
-
-### Ponte segura — `preload.js`
-
-O `preload.js` funciona como uma camada intermediária entre o processo principal e a interface.
-
-A aplicação utiliza `contextBridge` e `ipcRenderer` para expor somente as operações necessárias ao frontend.
-
-Essa abordagem evita disponibilizar diretamente o ambiente Node.js para a interface.
-
-### Interface — Renderer
-
-A camada de interface é responsável pela apresentação visual e pela interação com o usuário.
-
-Ela utiliza as APIs disponibilizadas pelo `preload.js` para solicitar operações ao processo principal, mantendo a separação entre apresentação e recursos nativos.
-
----
-
-## 🔐 Segurança
-
-Como o objetivo da aplicação é trabalhar com credenciais, segurança é uma preocupação importante no projeto.
-
-A arquitetura Electron foi configurada para reduzir a exposição da interface aos recursos do processo principal:
+O Electron separa a aplicação em diferentes contextos:
 
 ```text
-Renderer
-   │
-   │ API controlada
-   ▼
-Preload
-   │
-   │ IPC
-   ▼
-Main Process
-   │
-   └── Recursos do sistema
+┌──────────────────────────────┐
+│          Renderer            │
+│      React / Interface       │
+└──────────────┬───────────────┘
+               │
+               │ API controlada
+               ▼
+┌──────────────────────────────┐
+│           Preload            │
+│   Ponte entre os processos   │
+└──────────────┬───────────────┘
+               │
+               │ IPC
+               ▼
+┌──────────────────────────────┐
+│        Main Process          │
+│       Electron / Node        │
+└──────────────────────────────┘
 ```
 
-Entre as configurações utilizadas estão:
+A aplicação utiliza uma configuração de Electron que mantém o ambiente Node separado da interface, incluindo:
 
 - `contextIsolation: true`
 - `nodeIntegration: false`
-- Uso de `preload.js` como ponte controlada.
-- Separação entre interface e processo principal.
+- API exposta através do processo `preload`
+- Comunicação entre processos utilizando IPC
 
-> **Importante:** o CyberCafe Pass é um projeto pessoal e não deve ser considerado uma solução de segurança profissional ou substituto de um gerenciador de senhas auditado. O projeto está em desenvolvimento e pode receber melhorias futuras relacionadas à proteção e ao armazenamento das credenciais.
+Essa separação reduz a superfície de acesso da interface e evita disponibilizar diretamente as APIs do Node.js ao renderer.
+
+### Zero-Knowledge
+
+O projeto adota uma abordagem **local e Zero-Knowledge**, buscando manter os dados do usuário sob controle da própria aplicação, sem depender de um serviço remoto para armazenar as credenciais.
+
+> **Importante:** o CyberCafe Pass é um projeto pessoal e está em desenvolvimento. Ele não deve ser considerado uma solução de segurança profissional ou substituir gerenciadores de senhas amplamente auditados.
+
+---
+
+## 🏗️ Arquitetura
+
+A aplicação segue a arquitetura de processos do Electron combinada com uma interface React.
+
+### Main Process
+
+Responsável pelas operações que precisam de acesso ao ambiente Electron/Node.js e pelo ciclo de vida da aplicação desktop.
+
+### Preload
+
+Funciona como uma camada intermediária entre o renderer e o processo principal.
+
+O objetivo é expor somente as operações necessárias para a interface, evitando acesso direto do frontend às APIs do Node.js.
+
+### Renderer
+
+É a camada responsável pela interface da aplicação.
+
+Construída com React + TypeScript, ela concentra os componentes visuais, interações e gerenciamento do estado da aplicação.
+
+---
+
+## 🛠️ Stack
+
+### Desktop
+
+- **Electron**
+- **Electron Builder**
+- **electron-vite**
+
+### Frontend
+
+- **React**
+- **TypeScript**
+- **Tailwind CSS**
+- **Vite**
+- **Lucide React**
+
+### Estado e dados
+
+- **Zustand**
+
+### Qualidade e testes
+
+- **ESLint**
+- **Prettier**
+- **TypeScript**
+- **Vitest**
+
+### Tipografia
+
+- **JetBrains Mono**
+- **Quicksand**
 
 ---
 
 ## 📂 Estrutura do projeto
 
-A estrutura principal segue a organização tradicional de uma aplicação Electron:
+A estrutura principal do repositório é organizada da seguinte maneira:
 
 ```text
-cybercafe-pass/
+CyberCafe-Pass/
 │
-├── main.js              # Processo principal do Electron
-├── preload.js           # Ponte segura entre processos
-├── index.html           # Interface da aplicação
+├── .vscode/                  # Configurações e recomendações do VS Code
+├── resources/                # Recursos utilizados pela aplicação
+├── src/                      # Código principal da aplicação
+├── types/                    # Tipagens compartilhadas
 │
-├── src/                 # Código da interface
+├── .editorconfig             # Padronização do editor
+├── .gitignore                # Arquivos ignorados pelo Git
+├── .prettierignore           # Exclusões do Prettier
+├── .prettierrc.yaml          # Configuração do Prettier
 │
-├── package.json         # Configuração e dependências
-├── package-lock.json    # Versões exatas das dependências
-├── electron.vite.config.*
-└── README.md            # Documentação do projeto
+├── electron-builder.yml      # Configuração do empacotamento
+├── electron.vite.config.ts   # Configuração do Electron-Vite
+├── eslint.config.mjs         # Configuração do ESLint
+│
+├── package.json              # Dependências e scripts
+├── package-lock.json         # Lockfile do npm
+│
+├── tsconfig.json             # Configuração base do TypeScript
+├── tsconfig.node.json        # Configuração TypeScript para Node/Electron
+├── tsconfig.web.json         # Configuração TypeScript para o frontend
+│
+└── README.md                 # Documentação
 ```
 
-> A estrutura interna pode evoluir conforme novas funcionalidades forem adicionadas ao projeto.
+Arquivos de configuração como `tsconfig.*`, ESLint, Prettier, Electron-Vite e Electron Builder fazem parte do fluxo normal de desenvolvimento e distribuição da aplicação.
 
 ---
 
-## 💻 Como executar
+## 💻 Requisitos
 
-### Pré-requisitos
+Antes de executar o projeto, tenha instalado:
 
 - **Node.js 22 LTS**
 - **npm**
-- Git
+- **Git**
 
-O projeto atualmente utiliza **Node.js 22 LTS** como ambiente recomendado.
+> O projeto utiliza atualmente Node.js 22 LTS como ambiente recomendado para desenvolvimento.
 
-### Instalação
+---
 
-Clone o repositório:
+## 🚀 Instalação
+
+Clone o repositório e entre na pasta do projeto:
 
 ```bash
-git clone https://github.com/Weslley-141/cybercafe-pass.git
-cd cybercafe-pass
+git clone https://github.com/Weslley-141/CyberCafe-Pass.git
+cd CyberCafe-Pass
 ```
 
 Instale as dependências:
@@ -194,23 +244,96 @@ npm run dev
 
 ---
 
-## ⚙️ Scripts
+## ⚙️ Scripts disponíveis
 
-Os principais comandos utilizados durante o desenvolvimento são:
+### Desenvolvimento
 
 ```bash
 npm run dev
 ```
 
-Inicia a aplicação em modo de desenvolvimento.
+Inicia a aplicação em modo de desenvolvimento através do Electron-Vite.
+
+### Preview
+
+```bash
+npm run start
+```
+
+Inicia a aplicação utilizando o build existente em modo de preview.
+
+### Build
 
 ```bash
 npm run build
 ```
 
-Gera a versão de produção da aplicação, conforme a configuração do projeto.
+Executa a verificação de tipos e gera o build da aplicação.
 
-> Os scripts disponíveis podem ser consultados diretamente no `package.json`.
+### TypeScript
+
+```bash
+npm run typecheck
+```
+
+Executa as verificações de tipos para os ambientes Node/Electron e Web.
+
+Também é possível executar cada verificação separadamente:
+
+```bash
+npm run typecheck:node
+npm run typecheck:web
+```
+
+### Lint
+
+```bash
+npm run lint
+```
+
+Executa o ESLint no projeto.
+
+### Formatação
+
+```bash
+npm run format
+```
+
+Formata os arquivos utilizando Prettier.
+
+### Testes
+
+```bash
+npm run test
+```
+
+Executa os testes automatizados através do Vitest.
+
+### Build sem empacotamento final
+
+```bash
+npm run build:unpack
+```
+
+Gera o build e prepara uma versão não empacotada através do Electron Builder.
+
+### Build para Windows
+
+```bash
+npm run build:win
+```
+
+### Build para macOS
+
+```bash
+npm run build:mac
+```
+
+### Build para Linux
+
+```bash
+npm run build:linux
+```
 
 ---
 
@@ -218,54 +341,79 @@ Gera a versão de produção da aplicação, conforme a configuração do projet
 
 ### Por que Electron?
 
-O Electron permite utilizar tecnologias web já conhecidas no desenvolvimento de uma aplicação desktop, ao mesmo tempo em que disponibiliza APIs para integração com o sistema operacional.
+O Electron permite utilizar tecnologias web modernas para construir uma aplicação desktop multiplataforma.
 
-Para este projeto, isso permite combinar:
+Para o CyberCafe Pass, isso permite combinar:
 
 ```text
-HTML + CSS + JavaScript
-          │
-          ▼
-       Electron
-          │
-          ▼
-   Aplicação Desktop
+React + TypeScript
+        │
+        ▼
+      Vite
+        │
+        ▼
+     Electron
+        │
+        ▼
+Aplicação Desktop
 ```
 
-### Por que utilizar `preload`?
+A escolha também permite estudar conceitos que não aparecem da mesma forma em aplicações web tradicionais, como processos separados, IPC, preload e integração com o sistema operacional.
 
-Em vez de disponibilizar diretamente as APIs do Node.js para a interface, o projeto utiliza um `preload.js` para controlar quais operações podem ser acessadas pelo renderer.
+### Por que React?
 
-Isso proporciona uma separação mais clara entre:
+React oferece uma arquitetura baseada em componentes que facilita a organização da interface e permite que diferentes partes da aplicação evoluam de forma independente.
 
-- Interface.
-- Comunicação IPC.
-- Processo principal.
-- Recursos do sistema.
+### Por que TypeScript?
+
+Como o projeto trabalha com diferentes camadas — renderer, preload e main process — a tipagem ajuda a manter contratos mais claros entre elas e reduz erros durante o desenvolvimento.
+
+### Por que Zustand?
+
+O Zustand foi escolhido para gerenciamento de estado por ser simples, leve e adequado para controlar o estado compartilhado da interface sem adicionar uma camada excessivamente complexa à aplicação.
+
+### Por que Vite?
+
+O Vite fornece um ciclo de desenvolvimento rápido e integra-se diretamente ao fluxo utilizado pelo electron-vite.
 
 ---
 
-## 🚧 Estado do projeto
+## 🚧 Estado atual
 
 O CyberCafe Pass está em desenvolvimento.
 
-A aplicação já possui sua estrutura desktop funcionando e uma base preparada para o gerenciamento das credenciais. Novas funcionalidades e melhorias de segurança podem ser adicionadas conforme o projeto evolui.
+A estrutura principal da aplicação desktop já está estabelecida, incluindo o ambiente Electron, frontend React/TypeScript, gerenciamento de estado, configuração de build e ferramentas de qualidade.
 
-Possíveis melhorias futuras incluem:
+O projeto continua evoluindo conforme novas funcionalidades, melhorias de UX e decisões relacionadas à proteção dos dados são implementadas.
 
-- Melhorias na proteção das credenciais.
-- Sistema de busca e filtros.
-- Categorias para diferentes tipos de contas.
+### Próximos passos
+
+Algumas áreas que podem receber melhorias futuras:
+
+- Refinamento da proteção das credenciais.
+- Melhorias na experiência de gerenciamento.
+- Busca e filtros.
+- Categorias de credenciais.
 - Geração de senhas fortes.
-- Melhorias na experiência de edição e visualização.
-- Empacotamento para distribuição.
-- Testes automatizados.
-- Refinamento da arquitetura de armazenamento.
+- Melhorias de UX/UI.
+- Expansão dos testes automatizados.
+- Refinamento do armazenamento local.
+- Empacotamento e distribuição das versões finais.
+
+---
+
+## ⚠️ Aviso
+
+O CyberCafe Pass é um **projeto pessoal e experimental**.
+
+Apesar de utilizar práticas de segurança importantes na arquitetura Electron, ele não passou por uma auditoria de segurança independente e não deve ser utilizado como substituto de um gerenciador de senhas profissional para armazenar credenciais críticas.
+
+O projeto existe principalmente como uma aplicação funcional e como estudo prático de desenvolvimento desktop, arquitetura, segurança e engenharia de software.
 
 ---
 
 ## 👨‍💻 Autor
 
-**Weslley Eugênio**
+**Weslley-141**
 
-GitHub: [@Weslley-141](https://github.com/Weslley-141)
+**CyberCafe Pass** é um projeto autoral desenvolvido para transformar uma necessidade real em uma aplicação própria e explorar novas tecnologias fora do desenvolvimento web tradicional.
