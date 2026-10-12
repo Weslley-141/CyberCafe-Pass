@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Gerenciador de senhas local Zero-Knowledge com visual Cozy Cyberpunk",
   "main": "./out/main/index.js",
-  "author": "Weslley-322",
+  "author": "Weslley-141",
   "scripts": {
     "format": "prettier --write .",
     "lint": "eslint --cache .",
